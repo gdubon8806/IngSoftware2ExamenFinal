@@ -1,16 +1,29 @@
-# React + Vite
+Refactorización: Patrón Factory y Principio OCP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Justificación técnica
 
-Currently, two official plugins are available:
+Se refactorizó la creación de movimientos usando el patrón Factory Method para eliminar el acoplamiento entre la UI y las clases concretas de movimientos. Ahora, la UI solo conoce una función de fábrica (createMovement) y nunca instancia clases concretas ni discrimina tipos con switch o if. Se escogio este mas que todo porque este patron se usa mucho en este tipo de escenarios para quitar ifs y switches que renderizen cosas diferentes en base a la condicion o valor de algo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Esto mejora la cohesión y quita  el acoplamiento porque:
+- Toda la lógica de creación está centralizada en la fábrica.
+- La UI solo depende de la abstracción (Movement), no de implementaciones concretas.
+- Permite cumplir el Principio de Abierto/Cerrado (OCP): el sistema es abierto a extensión (nuevos tipos de movimientos) pero cerrado a modificación (no hay que cambiar la UI ni el resto del sistema para soportar nuevos tipos).
 
-## React Compiler
+ ¿Cómo agregar un nuevo tipo de movimiento? (OCP)
+1. Crear una nueva clase en src/models/ que extienda de Movement e implemente los métodos requeridos.
+2. Registrar la nueva clase en src/models/MovementFactory.js agregando una línea en el objeto movementTypes.
+3. (Opcional) Agregar datos de ejemplo en src/data/movements.js.
+4. ¡Listo! La UI lo soporta automáticamente, sin cambios adicionales.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Ejemplo de nuevo tipo: FEE
+- Se creó la clase Fee en src/models/Fee.js.
+- Se registró en la fábrica.
+- Se agregó un movimiento de tipo fee en los datos.
+- La UI lo muestra automáticamente.
 
-## Expanding the ESLint configuration
+ Instrucciones para correr el proyecto
+1. Instala dependencias:
+	npm install
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2. Ejecuta la app en modo desarrollo:
+	npm run dev

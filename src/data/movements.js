@@ -28,8 +28,16 @@ export const movementsData = [
     date: '2025-12-04',
     isIncoming: false
   },
+  //se agrego para ejemplo del nuevo tipo Fee
   {
     id: 5,
+    type: 'fee',
+    description: 'Comisión bancaria',
+    amount: 50.00,
+    date: '2025-12-05'
+  },
+  {
+    id: 9,
     type: 'transfer',
     description: 'Transferencia recibida de Juan Pérez',
     amount: 150.00,

@@ -1,28 +1,12 @@
-import { Deposit } from '../models/Deposit';
-import { Withdrawal } from '../models/Withdrawal';
-import { Transfer } from '../models/Transfer';
-import { Payment } from '../models/Payment';
+import { createMovement } from '../models/MovementFactory';
 import MovementCard from './MovementCard';
 import './MovementList.css';
 
 // TODO: extract creation
-function createMovement(data) {
-  switch (data.type) {
-    case 'deposit':
-      return new Deposit(data);
-    case 'withdrawal':
-      return new Withdrawal(data);
-    case 'transfer':
-      return new Transfer(data);
-    case 'payment':
-      return new Payment(data);
-    default:
-      throw new Error(`Unknown movement type: ${data.type}`);
-  }
-}
+// La creación de movimientos ahora está centralizada en MovementFactory
 
 function MovementList({ movementsData }) {
-  const movements = movementsData.map(data => createMovement(data));
+  const movements = movementsData.map(data => createMovement(data.type?.toUpperCase(), data));
 
   const totalBalance = movements.reduce((sum, m) => sum + m.getNetAmount(), 0);
 
